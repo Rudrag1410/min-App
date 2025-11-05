@@ -2,24 +2,25 @@
   width: 100%;
   max-width: var(--max-width-container);
   margin: 0 auto;
-  padding: var(--spacing-lg) var(--spacing-base);
+  padding: var(--spacing-base);
   height: 100%;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
 .stickyHeader {
   flex-shrink: 0;
   background-color: var(--bg-secondary);
-  padding-bottom: var(--spacing-md);
   margin-bottom: var(--spacing-md);
+  z-index: var(--z-index-max);
 }
 
 .header {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-sm);
-  margin-bottom: var(--spacing-xl);
+  gap: var(--spacing-xs);
+  margin-bottom: var(--spacing-base);
 }
 
 .title {
@@ -33,6 +34,24 @@
   margin: 0;
   font-size: var(--font-size-base);
   color: var(--text-secondary);
+}
+
+.virtuosoContainer {
+  flex: 1;
+  min-height: 0;
+  position: relative;
+}
+
+.skeletonContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+.virtuosoItem {
+  margin-top: var(--spacing-xs);
 }
 
 .listContainer {
@@ -76,39 +95,49 @@
 
 .empty {
   color: var(--text-secondary);
-  margin-top: var(--spacing-3xl);
+  margin-top: var(--spacing-2xl);
+}
+
+.loadingMore {
+  text-align: center;
+  padding: var(--spacing-md);
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
 }
 
 @media (min-width: 768px) {
   .container {
-    padding: var(--spacing-2xl) var(--spacing-xl);
+    padding: var(--spacing-xl) var(--spacing-lg);
   }
 
   .stickyHeader {
-    padding-bottom: var(--spacing-lg);
-    margin-bottom: var(--spacing-lg);
+    margin-bottom: var(--spacing-base);
   }
 
   .header {
     flex-direction: row;
     justify-content: space-between;
     align-items: flex-start;
-    margin-bottom: var(--spacing-2xl);
+    margin-bottom: var(--spacing-lg);
   }
 
   .title {
     font-size: var(--font-size-3xl);
   }
 
+  .virtuosoItem {
+    padding-bottom: var(--spacing-sm);
+  }
+
   .listContainer {
-    gap: var(--spacing-md);
+    gap: var(--spacing-sm);
     padding-right: var(--spacing-sm);
   }
 }
 
 @media (min-width: 1024px) {
   .container {
-    padding: var(--spacing-4xl) var(--spacing-3xl);
+    padding: var(--spacing-2xl) var(--spacing-xl);
   }
 
   .listContainer {

@@ -1,0 +1,165 @@
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.card {
+  margin-top: var(--spacing-base);
+  padding: var(--spacing-base);
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-base);
+}
+
+.titleSection {
+  margin-bottom: var(--spacing-sm);
+}
+
+.titleSkeleton {
+  height: 2.5rem;
+  width: 60%;
+  background: linear-gradient(
+    90deg,
+    var(--border-color) 0px,
+    #f0f0f0 40px,
+    var(--border-color) 80px
+  );
+  background-size: 1000px 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: var(--radius-sm);
+  margin-bottom: var(--spacing-sm);
+}
+
+.badgeSkeleton {
+  height: 1.5rem;
+  width: 5rem;
+  background: linear-gradient(
+    90deg,
+    var(--border-color) 0px,
+    #f0f0f0 40px,
+    var(--border-color) 80px
+  );
+  background-size: 1000px 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: var(--radius-md);
+}
+
+.descriptionSection {
+  margin-top: var(--spacing-base);
+}
+
+.descriptionTitleSkeleton {
+  height: 0.875rem;
+  width: 8rem;
+  background: linear-gradient(
+    90deg,
+    var(--border-color) 0px,
+    #f0f0f0 40px,
+    var(--border-color) 80px
+  );
+  background-size: 1000px 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: var(--radius-sm);
+  margin-bottom: var(--spacing-sm);
+}
+
+.descriptionLine {
+  height: 1rem;
+  width: 100%;
+  background: linear-gradient(
+    90deg,
+    var(--border-color) 0px,
+    #f0f0f0 40px,
+    var(--border-color) 80px
+  );
+  background-size: 1000px 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: var(--radius-sm);
+  margin-bottom: var(--spacing-sm);
+}
+
+.descriptionLineShort {
+  height: 1rem;
+  width: 75%;
+  background: linear-gradient(
+    90deg,
+    var(--border-color) 0px,
+    #f0f0f0 40px,
+    var(--border-color) 80px
+  );
+  background-size: 1000px 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: var(--radius-sm);
+}
+
+.footer {
+  margin-top: var(--spacing-base);
+  padding-top: var(--spacing-sm);
+  border-top: 1px solid var(--border-color);
+}
+
+.footerSkeleton {
+  height: 0.875rem;
+  width: 12rem;
+  background: linear-gradient(
+    90deg,
+    var(--border-color) 0px,
+    #f0f0f0 40px,
+    var(--border-color) 80px
+  );
+  background-size: 1000px 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: var(--radius-sm);
+}
+
+@media (min-width: 768px) {
+  .card {
+    margin-top: var(--spacing-lg);
+    padding: var(--spacing-xl);
+    border-radius: var(--radius-lg);
+  }
+
+  .titleSkeleton {
+    height: 3rem;
+    width: 50%;
+  }
+
+  .descriptionLine {
+    height: 1.125rem;
+  }
+
+  .descriptionLineShort {
+    height: 1.125rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .card {
+    padding: var(--spacing-2xl);
+  }
+
+  .titleSkeleton {
+    height: 3.5rem;
+  }
+
+  .descriptionSection {
+    margin-top: var(--spacing-lg);
+  }
+
+  .descriptionLine {
+    height: 1.25rem;
+  }
+
+  .descriptionLineShort {
+    height: 1.25rem;
+  }
+
+  .footer {
+    margin-top: var(--spacing-lg);
+  }
+}
+

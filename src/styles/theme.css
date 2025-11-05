@@ -35,7 +35,7 @@
   --radius-lg: 0.75rem;
   --sidebar-width: 16.25rem;
   --max-width-container: 75rem;
-  --max-width-detail: 56.25rem;
+  --z-index-max: 1000;
 }
 
 body {

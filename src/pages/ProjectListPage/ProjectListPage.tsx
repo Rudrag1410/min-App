@@ -1,85 +1,94 @@
-import { useForm } from "react-hook-form";
-import { useProjects } from "hooks/useProjects";
-import { filterProjects } from "utils/filterProjects";
-import type { Project } from "types/project.types";
-import ProjectCard from "components/ProjectCard";
+import { useMemo, useState } from "react";
+import { Virtuoso } from "react-virtuoso";
+import { useInfiniteProjects } from "hooks/useProjects";
+import { useDebounce } from "hooks/useDebounce";
+import type { Project, ProjectStatus } from "types/project.types";
+import Card from "components/Card";
+import CardSkeleton from "components/Card/CardSkeleton";
 import SearchInput from "components/SearchInput";
 import styles from "./ProjectListPage.module.css";
-
-interface SearchForm {
-  search: string;
-}
+import { getPageTitle } from "./ProjectListPage.utils";
 
 interface ProjectListPageProps {
-  filter?: "active" | "pending" | "archived";
+  filter?: ProjectStatus;
 }
 
 const ProjectListPage = ({ filter }: ProjectListPageProps) => {
-  const { data: projects, isLoading, error } = useProjects();
-  const { register, watch } = useForm<SearchForm>({
-    defaultValues: { search: "" },
-  });
+  const [searchQuery, setSearchQuery] = useState("");
+  const debouncedSearch = useDebounce(searchQuery);
 
-  const searchQuery = watch("search");
+  const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useInfiniteProjects({
+      search: debouncedSearch,
+      filter,
+    });
 
-  let filteredProjects: Project[] = [];
-  if (projects) {
-    // First filter by search query
-    filteredProjects = filterProjects(projects, searchQuery);
+  const allProjects: Project[] = useMemo(
+    () => data?.pages.flatMap((page) => page.data) ?? [],
+    [data]
+  );
 
-    // Then filter by status if a filter is provided
-    if (filter) {
-      filteredProjects = filteredProjects.filter((p) => p.status === filter);
-    }
-  }
+  const totalCount = useMemo(
+    () => data?.pages[0]?.pagination.total ?? 0,
+    [data]
+  );
 
-  const getPageTitle = () => {
-    if (filter) {
-      return `${filter.charAt(0).toUpperCase() + filter.slice(1)} Projects`;
-    }
-    return "All Projects";
-  };
-
-  const projectCount = filteredProjects.length;
-
-  if (isLoading) {
-    return (
-      <div className={styles.loading}>
-        <p>Loading projects...</p>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className={styles.error}>
-        <p>Error loading projects: {String(error)}</p>
-      </div>
-    );
-  }
+  const pageTitle = useMemo(() => getPageTitle(filter), [filter]);
 
   return (
     <div className={styles.container}>
       <div className={styles.stickyHeader}>
         <div className={styles.header}>
           <div>
-            <h1 className={styles.title}>{getPageTitle()}</h1>
+            <h1 className={styles.title}>{pageTitle}</h1>
             <p className={styles.subtitle}>
-              {projectCount} {projectCount === 1 ? "project" : "projects"} found
+              {totalCount} {totalCount === 1 ? "project" : "projects"} found
             </p>
           </div>
         </div>
 
-        <SearchInput register={register} />
+        <SearchInput
+          value={searchQuery}
+          onChange={setSearchQuery}
+          placeholder="Search projects..."
+          ariaLabel="Search projects"
+        />
       </div>
 
-      <div aria-label="Project list" className={styles.listContainer}>
-        {filteredProjects.length === 0 ? (
+      <div className={styles.virtuosoContainer}>
+        {isLoading ? (
+          <div className={styles.skeletonContainer}>
+            {Array.from({ length: 10 }).map((_, index) => (
+              <div key={index} className={styles.virtuosoItem}>
+                <CardSkeleton />
+              </div>
+            ))}
+          </div>
+        ) : allProjects.length === 0 ? (
           <p className={styles.empty}>No projects found</p>
         ) : (
-          filteredProjects.map((project) => (
-            <ProjectCard key={project.id} project={project} />
-          ))
+          <Virtuoso
+            style={{ height: "100%" }}
+            data={allProjects}
+            endReached={() => {
+              if (hasNextPage && !isFetchingNextPage) {
+                fetchNextPage();
+              }
+            }}
+            itemContent={(_, project) => (
+              <div className={styles.virtuosoItem}>
+                <Card key={project.id} project={project} />
+              </div>
+            )}
+            components={{
+              Footer: () =>
+                isFetchingNextPage ? (
+                  <div className={styles.loadingMore}>
+                    <p>Loading more projects...</p>
+                  </div>
+                ) : null,
+            }}
+          />
         )}
       </div>
     </div>

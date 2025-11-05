@@ -1,4 +1,4 @@
-import { projects } from "constants/data";
+import { projects } from "data";
 import type { Project } from "../types/project.types";
 
 export const getProjectById = async (

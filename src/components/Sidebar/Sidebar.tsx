@@ -1,21 +1,22 @@
 import { Link, useLocation } from "react-router";
+import classNames from "classnames";
 import { useProjects } from "hooks/useProjects";
 import styles from "./Sidebar.module.css";
+import { navItems } from "./Sidebar.constants";
+import { useMemo } from "react";
+import { PROJECT_STATUS } from "constants/project.constants";
 
 const Sidebar = () => {
   const location = useLocation();
   const { data: projects } = useProjects();
 
-  const activeCount =
-    projects?.filter((p) => p.status === "active").length || 0;
-  const totalCount = projects?.length || 0;
+  const activeCount = useMemo(
+    () =>
+      projects?.filter((p) => p.status === PROJECT_STATUS.ACTIVE).length || 0,
+    [projects]
+  );
 
-  const navItems = [
-    { path: "/", label: "All Projects", icon: "📊" },
-    { path: "/active", label: "Active", icon: "✓" },
-    { path: "/pending", label: "Pending", icon: "⏳" },
-    { path: "/archived", label: "Archived", icon: "📦" },
-  ];
+  const totalCount = useMemo(() => projects?.length || 0, [projects]);
 
   return (
     <aside className={styles.sidebar}>
@@ -29,9 +30,9 @@ const Sidebar = () => {
           <Link
             key={item.path}
             to={item.path}
-            className={`${styles.navItem} ${
-              location.pathname === item.path ? styles.active : ""
-            }`}
+            className={classNames(styles.navItem, {
+              [styles.active]: location.pathname === item.path,
+            })}
           >
             <span className={styles.icon}>{item.icon}</span>
             <span className={styles.label}>{item.label}</span>
