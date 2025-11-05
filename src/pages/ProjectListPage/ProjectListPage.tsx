@@ -8,6 +8,7 @@ import CardSkeleton from "components/Card/CardSkeleton";
 import SearchInput from "components/SearchInput";
 import styles from "./ProjectListPage.module.css";
 import { getPageTitle } from "./ProjectListPage.utils";
+import { ITEM_PER_PAGE } from "constants/common.constants";
 
 interface ProjectListPageProps {
   filter?: ProjectStatus;
@@ -58,7 +59,7 @@ const ProjectListPage = ({ filter }: ProjectListPageProps) => {
       <div className={styles.virtuosoContainer}>
         {isLoading ? (
           <div className={styles.skeletonContainer}>
-            {Array.from({ length: 10 }).map((_, index) => (
+            {Array.from({ length: ITEM_PER_PAGE }).map((_, index) => (
               <div key={index} className={styles.virtuosoItem}>
                 <CardSkeleton />
               </div>
